@@ -1,5 +1,3 @@
-# Set up dev env
-
 This is a simple script that set ups my dev environment the way I like it and use it.
 
 It's main goal is to get me up the speed when I reinstall my OS or get a new Mac.
