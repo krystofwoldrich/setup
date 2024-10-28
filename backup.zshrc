@@ -1,12 +1,43 @@
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+source /opt/homebrew/opt/zinit/zinit.zsh
+
+if [ "${TERM_PROGRAM}" != "Apple_Terminal" ]; then
+  eval "$(oh-my-posh init zsh --config ${HOME}/.config/ohmyposh/base.toml)"
 fi
 
-export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="powerlevel10k/powerlevel10k"
-plugins=(git)
-source $ZSH/oh-my-zsh.sh
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light Aloxaf/fzf-tab
+zinit light zsh-users/zsh-history-substring-search
+
+zinit snippet OMZP::command-not-found
+
+autoload -U compinit && compinit
+
+zinit cdreplay -q
+
+bindkey '^[[A' history-search-backward
+bindkey '^[[B' history-search-forward
+
+HISTSIZE=10000
+HISTFILE="${HOME}/.zsh_history"
+SAVEHIST=$HISTSIZE
+HISTDUP=erase
+setopt appendhistory
+setopt sharehistory
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
+
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' menu no
+
+alias ls="ls --color"
+
+eval "$(fzf --zsh)"
+eval "$(zoxide init zsh --cmd cd)"
 
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
